@@ -1,0 +1,38 @@
+<odoo>
+
+    <menuitem id="menu_library_root"
+              name="Library Management"
+              sequence="10"/>
+
+    
+    <record id="action_library_members" model="ir.actions.act_window">
+        <field name="name">Socios</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_member', '=', True)]</field>
+    </record>
+
+    
+    <menuitem id="menu_library_members"
+              name="Socios"
+              parent="menu_library_root"
+              action="action_library_members"
+              sequence="1"/>
+
+    
+    <record id="view_partner_form_inherit_library" model="ir.ui.view">
+        <field name="name">res.partner.form.library</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Biblioteca">
+                    <field name="is_member"/>
+                    <field name="member_code"/>
+                    <field name="member_date"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

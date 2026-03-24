@@ -1,0 +1,105 @@
+<odoo>
+    <template id="portal_my_home_library" inherit_id="portal.portal_my_home">
+
+        <xpath expr="//div[contains(@class, 'o_portal_my_home')]" position="inside">
+
+            <div class="mt-4">
+                <h2>Catálogo de Libros</h2>
+
+                <div class="row">
+                    <t t-set="books" t-value="request.env['library.book'].sudo().search([('state','=','available')])"/>
+
+                    <t t-foreach="books" t-as="book">
+                        <div class="col-md-4">
+                            <div class="card p-2 m-2">
+
+                                <t t-if="book.image">
+                                    <img t-att-src="'/web/image/library.book/%s/image' % book.id"
+                                        class="card-img-top"
+                                        style="max-height:200px; object-fit:cover;"/>
+                                </t>
+                                <h5><t t-esc="book.name"/></h5>
+                                <p><t t-esc="book.author"/></p>
+
+                                <span class="badge bg-success">Disponible</span>
+
+                            </div>
+                        </div>
+                    </t>
+
+                </div>
+            </div>
+
+
+    <t t-if="request.env.user.partner_id.is_member">
+
+        <div class="mt-4">
+            <h2>Mis Préstamos</h2>
+
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Libro</th>
+                        <th>Fecha de Préstamo</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="request.env['library.loan'].sudo().search([
+                        ('member_id', '=', request.env.user.partner_id.id)
+                    ])" t-as="loan">
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    <t t-esc="loan.book_id.name if loan.book_id else ''"/>
+                                </strong>
+                            </td>
+
+                            <td>
+                                <t t-esc="loan.loan_date"/>
+                            </td>
+
+                            <td>
+                                <t t-if="loan.state == 'active'">
+                                    <span class="badge bg-warning">Activo</span>
+                                </t>
+                                <t t-elif="loan.state == 'returned'">
+                                    <span class="badge bg-success">Devuelto</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge bg-secondary">
+                                        <t t-esc="loan.state"/>
+                                    </span>
+                                </t>
+                            </td>
+
+                            <td>
+                                <t t-if="loan.state == 'active'">
+                                    <a t-att-href="'/my/loans/renew/%d' % loan.id"
+                                    class="btn btn-primary btn-sm">
+                                        Renovar
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <span class="text-muted">-</span>
+                                </t>
+                            </td>
+
+                        </tr>
+
+                    </t>
+                </tbody>
+            </table>
+
+        </div>
+
+    </t>
+
+        </xpath>
+
+    </template>
+</odoo>

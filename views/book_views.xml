@@ -1,0 +1,52 @@
+<odoo>
+
+    
+    <record id="view_library_book_tree" model="ir.ui.view">
+        <field name="name">library.book.list</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <list string="Libros">
+                <field name="name"/>
+                <field name="author"/>
+                <field name="publication_year" options="{'no_format': True}"/>
+                <field name="years_since_publication"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+   
+    <record id="view_library_book_form" model="ir.ui.view">
+        <field name="name">library.book.form</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <form string="Libro">
+                <sheet>
+                <field name="image" widget="image" class="oe_avatar"/>
+                    <group>
+                        <field name="name"/>
+                        <field name="author"/>
+                        <field name="isbn"/>
+                        <field name="publication_year" options="{'no_format': True}"/>
+                        <field name="state"/>
+                        <field name="years_since_publication" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
+    <record id="action_library_books" model="ir.actions.act_window">
+        <field name="name">Libros</field>
+        <field name="res_model">library.book</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+  
+<menuitem id="menu_library_books_new"
+          name="Libros"
+          parent="menu_library_root"
+          action="action_library_books"
+          sequence="20"/>
+</odoo>
